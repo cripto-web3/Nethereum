@@ -1,0 +1,38 @@
+# Copilot Custom Instructions
+# เอกสารนี้ให้ข้อมูลวิธี build, test, run และแนวทางสำหรับ pull request
+# ใช้สำหรับ Copilot cloud agent ในการทำงานอย่างถูกต้องในโปรเจ็กต์นี้
+
+build:
+  steps:
+    - ใช้ .NET SDK เวอร์ชัน 7.0 หรือสูงกว่า (dotnet --version)
+    - Restore dependencies: dotnet restore
+    - Build โซลูชัน: dotnet build --no-restore --configuration Release
+
+test:
+  steps:
+    - Run tests: dotnet test --no-build --configuration Release --logger "trx"
+    - Ensure that all tests pass beforeสร้าง pull request
+
+lint:
+  steps:
+    - ตรวจสอบด้วย dotnet format: dotnet format --verify-no-changes
+    - แก้ไข style หรือ format อัตโนมัติถ้าทำได้
+
+pull_request:
+  steps:
+    - พิจารณาการสร้าง unit test สำหรับโค้ดใหม่หรือที่แก้ไข
+    - เพิ่ม/อัปเดตเอกสาร (README.md หรือ XML documentation) หากมี API/ฟังก์ชันใหม่
+    - อย่า push ไปที่ branch หลักโดยตรง ให้ใช้ branch ที่ prefix ว่า copilot/
+
+conventions:
+  - รักษา coding style C# ตาม .editorconfig และ conventions ที่ทีมกำหนด
+  - หลีกเลี่ยง hard-coded secrets และข้อมูลสำคัญ
+  - ให้ตรวจสอบ vulnerability dependency ที่เพิ่มใหม่เสมอ (dotnet list package --vulnerable)
+
+context:
+  - โปรเจกต์นี้คือ Nethereum, .NET library สำหรับ Ethereum blockchain
+  - ซอร์สโค้ดหลักจะอยู่ใน src/
+  - โฟลเดอร์ test/ สำหรับ unit/integration tests
+  - ฟังก์ชันที่สำคัญเกี่ยวข้องกับ smart contract interaction, wallet, RPC
+
+# ตัวอย่างเพิ่มเติมสามารถปรับแต่งได้ตามโปรเจกต์
